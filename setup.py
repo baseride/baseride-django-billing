@@ -4,7 +4,6 @@ try:
     setup(
         name = "baseride-django-billing",
         packages = find_packages(),
-    )
         install_requires = [
             "json_field",
             "django >= 1.6.10, < 1.8",
@@ -17,6 +16,6 @@ try:
             "Programming Language :: Python :: 2.7",
             "Framework :: Django",
         ]
-
+    )
 finally:
     pass
