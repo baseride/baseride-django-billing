@@ -6,6 +6,7 @@ from json_field import JSONField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q, F
 from django.contrib import auth
+from django.utils import timezone
 
 PAYMENT_PROFILE_STATUS = (
     ( 'A', _('Active') ),
@@ -27,20 +28,20 @@ class BasePaymentProfile(models.Model):
     status = models.CharField(max_length=2,default='P',choices=PAYMENT_PROFILE_STATUS,verbose_name=_('Status'),help_text=_('Current status of profile'), db_index=True)
     plan = models.ForeignKey(BaseBillingPlan,null=True,on_delete=models.SET_NULL,verbose_name=_('Billing Plan'),help_text=_('Billing Plan'))
     payment_details = JSONField(verbose_name=_('Details'),help_text=_('Payment profile details'))
-    creation_ts = models.DateTimeField(auto_now_add=True, help_text='When the profile has been created', verbose_name='Created', db_index=True)
+    creation_ts = models.DateTimeField(default=timezone.now, help_text='When the profile has been created', verbose_name='Created', db_index=True)
 
     class Meta:
         verbose_name = _('Payment profile')
         verbose_name_plural = _('Payment profiles')
 
     def __unicode__(self):
-        return unicode('%s (%s) %s' % (self.user_profile.username, self.status, self.plan.name))
+        return unicode('%s (%s) %s' % (self.user_profile.username if self.user_profile.username else '?', self.status, self.plan.name))
 
 
 class BaseBillingLog(models.Model):
-    creation_ts = models.DateTimeField(auto_now_add=True, help_text='When the log entry has been created', verbose_name='Created', db_index=True)
+    creation_ts = models.DateTimeField(default=timezone.now, help_text='When the log entry has been created', verbose_name='Created', db_index=True)
     features = JSONField(verbose_name=_('Features'),help_text=_('Billing details'))
     payment_profile = models.ForeignKey(BasePaymentProfile,verbose_name=_('Payment Profile'),help_text=_('Payment profile'),related_name='profile_logs')
 
     def __unicode__(self):
-        return unicode('%s %s' % (str(self.creation_ts), self.payment_profile.user_profile.username))
+        return unicode('%s %s' % (str(self.creation_ts), self.payment_profile.user_profile.username if self.payment_profile.user_profile.username else '?'))
