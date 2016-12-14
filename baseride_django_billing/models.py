@@ -35,7 +35,9 @@ class BasePaymentProfile(models.Model):
         verbose_name_plural = _('Payment profiles')
 
     def __unicode__(self):
-        return unicode('%s (%s) %s' % (self.user_profile.username if self.user_profile.username else '?', self.status, self.plan.name))
+        if not self.user_profile or not self.user_profile.username or not self.plan:
+            return 'empty user_profile/username/plan'
+        return unicode('%s (%s) %s' % (self.user_profile.username, self.status, self.plan.name))
 
 
 class BaseBillingLog(models.Model):
@@ -44,4 +46,6 @@ class BaseBillingLog(models.Model):
     payment_profile = models.ForeignKey(BasePaymentProfile,verbose_name=_('Payment Profile'),help_text=_('Payment profile'),related_name='profile_logs')
 
     def __unicode__(self):
-        return unicode('%s %s' % (str(self.creation_ts), self.payment_profile.user_profile.username if self.payment_profile.user_profile.username else '?'))
+        if not self.payment_profile.user_profile or not self.payment_profile.user_profile.username:
+            return 'empty user_profile/username'
+        return unicode('%s %s' % (str(self.creation_ts), self.payment_profile.user_profile.username))
