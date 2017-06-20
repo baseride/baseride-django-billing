@@ -2,7 +2,7 @@
 # -- encoding=utf-8
 
 from django.db import models
-from json_field import JSONField
+from jsonfield import JSONField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q, F
 from django.contrib import auth
