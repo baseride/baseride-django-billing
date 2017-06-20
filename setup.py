@@ -5,10 +5,10 @@ try:
         name = "baseride-django-billing",
         packages = find_packages(),
         install_requires = [
-            "django-json-field >= 0.5.7",
-            "django >= 1.6.10, < 1.8",
+            "django-jsonfield >= 0.5.7",
+            "django >= 1.11",
         ],
-        version = "1.0.2",
+        version = "1.0.3",
         classifiers = [
             "Development Status :: 5 - Production/Stable",
             "Operating System :: OS Independent",
