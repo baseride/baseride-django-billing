@@ -6,6 +6,8 @@ import django.db.models.deletion
 from django.conf import settings
 import jsonfield.fields
 
+import django.utils.timezone
+
 
 class Migration(migrations.Migration):
 
@@ -18,7 +20,7 @@ class Migration(migrations.Migration):
             name='BaseBillingLog',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('creation_ts', models.DateTimeField(auto_now_add=True, help_text=b'When the log entry has been created', verbose_name=b'Created', db_index=True)),
+                ('creation_ts', models.DateTimeField(default=django.utils.timezone.now, help_text=b'When the log entry has been created', verbose_name=b'Created', db_index=True)),
                 ('features', jsonfield.fields.JSONField(blank=True, null=True, help_text='Billing details', verbose_name='Features')),
             ],
             options={
@@ -43,7 +45,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.CharField(default=b'P', choices=[(b'A', 'Active'), (b'L', 'Locked'), (b'P', 'Passive')], max_length=2, help_text='Current status of profile', verbose_name='Status', db_index=True)),
                 ('payment_details', jsonfield.fields.JSONField(blank=True, null=True, help_text='Payment profile details', verbose_name='Details')),
-                ('creation_ts', models.DateTimeField(auto_now_add=True, help_text=b'When the profile has been created', verbose_name=b'Created', db_index=True)),
+                ('creation_ts', models.DateTimeField(default=django.utils.timezone.now, help_text=b'When the profile has been created', verbose_name=b'Created', db_index=True)),
                 ('plan', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Billing Plan', to='baseride_django_billing.BaseBillingPlan', help_text='Billing Plan', null=True)),
                 ('user_profile', models.ForeignKey(related_name='payment_profiles', on_delete=django.db.models.deletion.SET_NULL, verbose_name='User', to=settings.AUTH_USER_MODEL, help_text='User owner', null=True)),
             ],
