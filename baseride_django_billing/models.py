@@ -17,7 +17,7 @@ PAYMENT_PROFILE_STATUS = (
 class BaseBillingPlan(models.Model):
     name = models.CharField(max_length=128,verbose_name=_('Name'),help_text=_('Name of the billing plan'))
     universal_key = models.CharField(max_length=32,blank=True,null=True,db_index=True,verbose_name=_('Universal key'),help_text=_('Universal key for fast plan search'))
-    features = JSONField(verbose_name=_('Features'),help_text=_('Billing plan details'))
+    features = JSONField(blank=True, null=True,verbose_name=_('Features'),help_text=_('Billing plan details'))
 
     def __unicode__(self):
         return unicode(self.name)
@@ -27,7 +27,7 @@ class BasePaymentProfile(models.Model):
     user_profile = models.ForeignKey(auth.models.User,null=True,on_delete=models.SET_NULL,verbose_name=_('User'),help_text=_('User owner'),related_name='payment_profiles')
     status = models.CharField(max_length=2,default='P',choices=PAYMENT_PROFILE_STATUS,verbose_name=_('Status'),help_text=_('Current status of profile'), db_index=True)
     plan = models.ForeignKey(BaseBillingPlan,null=True,on_delete=models.SET_NULL,verbose_name=_('Billing Plan'),help_text=_('Billing Plan'))
-    payment_details = JSONField(verbose_name=_('Details'),help_text=_('Payment profile details'))
+    payment_details = JSONField(blank=True, null=True,verbose_name=_('Details'),help_text=_('Payment profile details'))
     creation_ts = models.DateTimeField(default=timezone.now, help_text='When the profile has been created', verbose_name='Created', db_index=True)
 
     class Meta:
@@ -42,7 +42,7 @@ class BasePaymentProfile(models.Model):
 
 class BaseBillingLog(models.Model):
     creation_ts = models.DateTimeField(default=timezone.now, help_text='When the log entry has been created', verbose_name='Created', db_index=True)
-    features = JSONField(verbose_name=_('Features'),help_text=_('Billing details'))
+    features = JSONField(blank=True, null=True,verbose_name=_('Features'),help_text=_('Billing details'))
     payment_profile = models.ForeignKey(BasePaymentProfile,verbose_name=_('Payment Profile'),help_text=_('Payment profile'),related_name='profile_logs')
 
     def __unicode__(self):
