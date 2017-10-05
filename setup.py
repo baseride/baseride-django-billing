@@ -5,8 +5,7 @@ try:
         name = "baseride-django-billing",
         packages = find_packages(),
         install_requires = [
-            "django-jsonfield >= 0.5.7",
-            "django >= 1.11",
+            "django >= 1.10",
         ],
         version = "1.0.3",
         classifiers = [
